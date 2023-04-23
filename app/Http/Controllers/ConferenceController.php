@@ -48,21 +48,25 @@ class ConferenceController extends Controller
     }
     public function update(int $id, Request $request): RedirectResponse
     {
-        $request->validate([
-            'title' => 'required|min:5|max:20',
-            'content' => 'required|min:10',
-            'address' => 'required|min:5',
-            'date' => 'required|min:10'
-        ]);
-
-        $conference = (new Conference())->findOrFail($id);
-        $validated = $request->validated();
-        $conference -> fill($validated);
-        $conference -> save();
         
-        session()->flash('status', 'Conference was updated!');
+        $conference = Conference::findOrFail($id);
+        $conference->update($request->all());
+        return redirect()->route('conferences.show', ['conference' => $conference->id]);
+    }
+    public function edit($id)
+    {
+        $conference = Conference::findOrFail($id);
+        return view('conferences.edit', compact('conference'));
+    }
 
-        return redirect()->route('conferences.index');
+    public function destroy($id)
+    {
+        $conference = (new Conference())->findOrFail($id);
+        $conference->delete();
+
+        session()->flash('status', 'Conference was deleted');
+
+        return redirect()->route('index');
     }
     
     public function any()
