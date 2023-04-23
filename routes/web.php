@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ConferenceController;
-use App\Http\Controllers\HomeController;
-use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Spatie\LaravelIgnition\Http\Requests\UpdateConfigRequest;
 
 Route::resource('/', ConferenceController::class)->only(['index']);
 Route::resource('/conferences', ConferenceController::class)->only(['show']);
@@ -14,3 +12,10 @@ Route::get('/create', [ConferenceController::class, 'create'])->name('conference
 Route::get('/edit/{id}', [ConferenceController::class, 'edit'])->name('conferences.edit');
 Route::put('/update/{id}', [ConferenceController::class, 'update'])->name('conferences.update');
 Route::delete('/destroy/{id}', [ConferenceController::class, 'destroy'])->name('conferences.destroy');
+
+
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
+Route::get('login', [LoginController::class, 'login'])->name('login');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+Auth::routes();
